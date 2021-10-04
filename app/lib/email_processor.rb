@@ -6,6 +6,8 @@ class EmailProcessor
   end
 
   def process
+    puts "HERE"
     p email.as_json
+    puts "HERE"
   end
 end
