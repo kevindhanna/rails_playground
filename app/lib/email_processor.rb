@@ -7,7 +7,16 @@ class EmailProcessor
 
   def process
     puts "HERE"
-    p email.as_json
-    puts "HERE"
+    p {
+      subject: email.subject,
+      to: email.to,
+      from: email.from,
+      reply_to: email.from,
+      template_name: 'proxy_email',
+      template_variables: {
+        body: email.raw_text
+      },
+      attachments: email.attachments
+    }
   end
 end
