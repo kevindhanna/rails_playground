@@ -6,19 +6,6 @@ class EmailProcessor
   end
 
   def process
-    puts "HERE"
-    thing = {
-      subject: email.subject,
-      to: email.to,
-      from: email.from,
-      reply_to: email.from,
-      template_name: 'proxy_email',
-      template_variables: {
-        body: email.raw_text
-      },
-      attachments: email.attachments
-    }
-
-    p thing
+    puts "Proccessing"
   end
 end
