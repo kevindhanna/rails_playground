@@ -3,7 +3,7 @@ class MailController < Griddler::EmailsController
 
   def print_stuff
     puts "BEFORE"
-    puts params
+    puts params.as_json
     puts "BEFORE"
   end
 end
