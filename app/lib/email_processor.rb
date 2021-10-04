@@ -6,6 +6,6 @@ class EmailProcessor
   end
 
   def process
-    p email
+    p email.as_json
   end
 end
