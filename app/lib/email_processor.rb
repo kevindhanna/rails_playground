@@ -6,6 +6,7 @@ class EmailProcessor
   end
 
   def process
-    puts "Proccessing"
+    puts "class", email.class
+    puts "text:", email.raw_text
   end
 end

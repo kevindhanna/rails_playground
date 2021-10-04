@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  post '/email_proxy' => 'mail#create'
+  post '/email_proxy' => 'griddler/emails#create'
 end
