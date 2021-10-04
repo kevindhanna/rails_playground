@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount_griddler('/email_proxy')
+  post '/email_proxy' => 'griddler/emails#create'
 end
