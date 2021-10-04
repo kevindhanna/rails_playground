@@ -7,7 +7,7 @@ class EmailProcessor
 
   def process
     puts "HERE"
-    p {
+    thing = {
       subject: email.subject,
       to: email.to,
       from: email.from,
@@ -18,5 +18,7 @@ class EmailProcessor
       },
       attachments: email.attachments
     }
+
+    p thing
   end
 end
