@@ -2,6 +2,9 @@ Rails.application.configure do
   # Prepare the ingress controller used to receive mail
   config.action_mailbox.ingress = :mailgun
 
+  # Use a real queuing backend for Active Job (and separate queues per environment)
+  config.active_job.queue_adapter = :sidekiq
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.

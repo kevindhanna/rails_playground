@@ -1,16 +1,15 @@
 class ForwardsMailbox < ApplicationMailbox
+  InvalidChecksum = Class.new(StandardError)
+
   def process
-    puts "MAIL"
-    p mail
-    puts "MAIL TEXT PART"
-    puts mail.text_part
-    puts "MAIL HTML PART"
-    puts mail.html_part
-    puts "to"
-    p mail.to
-    puts "from"
-    p mail.from
-    puts "source"
-    p inbound_email.source
+    proxied_email = Email.new(
+      subject: mail.subject,
+      to: "kevin@contact.xyz",
+      from: "forwards@email.contact-staging.com",
+      reply_to: "forwards@email.contact-staging.com",
+      html: mail.html_part.decoded,
+      attachments: mail.attachments
+    )
+    MailClients::Mailgun.new(proxied_email).deliver_later
   end
 end
