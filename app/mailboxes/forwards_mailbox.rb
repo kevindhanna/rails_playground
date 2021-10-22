@@ -2,6 +2,7 @@ class ForwardsMailbox < ApplicationMailbox
   InvalidChecksum = Class.new(StandardError)
 
   def process
+    raise "PLZZ"
     proxied_email = Email.new(
       subject: mail.subject,
       to: "kevin@contact.xyz",
