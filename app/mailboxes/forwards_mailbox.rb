@@ -10,6 +10,7 @@ class ForwardsMailbox < ApplicationMailbox
       html: mail.html_part.decoded,
       attachments: mail.attachments
     )
+    p proxied_email
     MailClients::Mailgun.new(proxied_email).deliver_later
   end
 end
