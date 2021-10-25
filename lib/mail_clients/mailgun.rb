@@ -13,7 +13,7 @@ class MailClients::Mailgun
   end
 
   def deliver
-    response = self.class.client.post("#{ROOT_URL}/messages", form: request_body)
+    response = self.class.client.send_message("email.contact-staging.com", message)
 
     json = JSON.parse(response.body)
 
@@ -22,52 +22,24 @@ class MailClients::Mailgun
     response
   end
 
-  def deliver_later
-    MailerJob.perform_later(
-      self.class.to_s,
-      from: email.from,
-      to: email.to,
-      reply_to: email.reply_to,
-      subject: email.subject,
-      html: email.html,
-      attachments: email.attachments
-    )
-  end
-
   def self.client
-    HTTP.basic_auth(user: 'api', pass: ENV['MAILGUN_API_KEY'])
+    Mailgun::Client.new(ENV['MAILGUN_API_KEY'], 'api.eu.mailgun.net')
   end
 
   private
 
-  def request_body
-    base_params = {
-      from: email.from,
-      to: email.to,
-      html: email.html,
-      subject: email.subject,
-      'h:Reply-To' => email.reply_to
-    }
+  def message
+    message_obj = Message::MessageBuilder.new()
+      .from(email.from)
+      .add_recipient(to: email.to, { first: "Kevin", last: "Hanna" })
+      .body_html(email.html)
+      .subject(email.subject)
+      .reply_to(email.reply_to)
 
-    base_params[:attachment] = attachments if attachments
+    email.attachments.each do
+      message_obj.add_attachment(attachment)
+    end
 
-    base_params
-  end
-
-  def attachments
-    safe_attachments = Array(email.attachments).compact
-    return nil unless safe_attachments.present?
-
-    @attachments ||= safe_attachments.map do |attachment|
-      data = HTTP.follow.get(attachment[:url])
-
-      next if data.content_length.to_i.zero? || data.content_length.to_i > MAX_ATTACHMENT_SIZE
-
-      HTTP::FormData::File.new(
-        StringIO.new(data.body),
-        filename: attachment[:filename],
-        content_type: attachment[:content_type]
-      )
-    end.compact
+    message_obj
   end
 end
