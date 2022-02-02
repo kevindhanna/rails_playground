@@ -25,7 +25,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Build and run
+      - name: Build and run Rails
         env:
           DATABASE_URL: postgres://contact:@localhost:5432/test
           RAILS_ENV: production
@@ -40,4 +40,6 @@ jobs:
           bundle exec rails db:migrate
           bundle exec rails db:seed
           bundle exec puma -C config/puma.rb &
+      - name: Send test request
+        run: |
           ruby script/smoketest
