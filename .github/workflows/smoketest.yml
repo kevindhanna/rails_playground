@@ -29,6 +29,7 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:@localhost:5432/test
           RAILS_ENV: production
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           POSTGRES_USER: contact
           POSTGRES_PASSWORD: postgres
         run: |
