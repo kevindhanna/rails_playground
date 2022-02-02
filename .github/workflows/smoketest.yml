@@ -39,4 +39,5 @@ jobs:
           bundle exec rails db:create
           bundle exec rails db:migrate
           bundle exec rails db:seed
-          bundle exec puma -C config/puma.rb
+          bundle exec puma -C config/puma.rb &
+          ruby script/smoketest
