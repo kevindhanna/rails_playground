@@ -27,10 +27,9 @@ jobs:
           bundler-cache: true
       - name: Build and run
         env:
-          DATABASE_URL: postgres://postgres:@localhost:5432/test
+          DATABASE_URL: postgres://contact:postgres@localhost:5432/test
           RAILS_ENV: production
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          POSTGRES_USER: contact
           POSTGRES_PASSWORD: postgres
         run: |
           sudo apt-get -yqq install libpq-dev
