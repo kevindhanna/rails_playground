@@ -1,0 +1,32 @@
+name: Smoke Test
+services:
+  postgres:
+    image: postgres:11
+    env:
+      POSTGRES_USER: contact
+      POSTGRES_PASSWORD: postgres
+      ports: ['5432:5432']
+      options:
+        --health-cmd pg_isready
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
+  steps:
+    - uses: actions/checkout@v2
+    - name: Setup Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 3.1.0
+    - name: Build and run
+      env:
+        DATABASE_URL: postgres://postgres:@localhost:5432/test
+        RAILS_ENV: production
+        POSTGRES_USER: contact
+        POSTGRES_PASSWORD: postgres
+      run: |
+        sudo apt-get -yqq install libpq-dev
+        gem install bundler:2.3.4
+        bundle install --jobs 4 --retry 3
+        bundle exec rails db:create
+        bundle exec rails db:migrate
+        bundle exec rake
