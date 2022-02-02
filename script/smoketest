@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'http'
+require 'net/http'
 
 class String
   # colorization
@@ -19,16 +19,22 @@ end
 
 class Smoketest
   def self.run!
-    response = HTTP.get("http://localhost:3000/")
-    if (response.code < 300)
+    # uri = URI('http://localhost:3000/graphql')
+    # http = Net::HTTP.new(uri.host, uri.port)
+    # request = Net::HTTP::Post.new(uri.path)
+    # response = http.request(request)
+
+    uri = URI('http://localhost:3000')
+    response = Net::HTTP.get_response(uri)
+    if (response.code.to_i < 300)
       STDOUT.puts "Success!".green
       exit(0)
     end
 
     STDERR.puts "Request wasn't successful. Response code:".red, response.code
     exit(1)
-  rescue HTTP::ConnectionError
-    STDERR.puts "Connection Error, is the server running?".red
+  rescue Errno::ECONNREFUSED
+    STDERR.puts "Connection Refused! Is the server running?".red
     exit(1)
   end
 end
