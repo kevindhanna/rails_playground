@@ -22,9 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.0
+          bundler-cache: true
       - name: Build and run
         env:
           DATABASE_URL: postgres://postgres:@localhost:5432/test
@@ -37,4 +37,5 @@ jobs:
           bundle install --jobs 4 --retry 3
           bundle exec rails db:create
           bundle exec rails db:migrate
+          bundle exec rails db:seed
           bundle exec rake
